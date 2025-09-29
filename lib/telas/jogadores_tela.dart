@@ -110,7 +110,6 @@ class JogadoresTela extends StatelessWidget {
                   title: Text('Lista de Jogadores', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Divider(),
-                // Placeholder para a lista de jogadores
                 Padding(
                   padding: EdgeInsets.all(24.0),
                   child: Center(
