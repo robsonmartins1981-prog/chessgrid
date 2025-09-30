@@ -1,18 +1,16 @@
 // lib/telas/dashboard_tela.dart
 
 import 'package:flutter/material.dart';
+import 'package:chessgrid/telas/main_tela.dart';
+import 'package:chessgrid/telas/novo_torneio_tela.dart';
 import 'package:chessgrid/telas/torneios_tela.dart';
 import 'package:chessgrid/telas/jogadores_tela.dart';
-import 'package:chessgrid/telas/suporte_tela.dart';
-import 'package:chessgrid/telas/novo_torneio_tela.dart';
 import 'package:chessgrid/telas/configuracoes_tela.dart';
+import 'package:chessgrid/telas/suporte_tela.dart';
+
 
 class DashboardTela extends StatelessWidget {
   const DashboardTela({super.key});
-
-  void _navigateTo(BuildContext context, Widget screen) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class DashboardTela extends StatelessWidget {
                   icon: Icons.emoji_events,
                   actionText: 'Acessar Torneios',
                   cardColor: Colors.orange.shade600,
-                  onPressed: () => _navigateTo(context, const TorneiosTela()),
+                  onPressed: () => MainTela.of(context).navigateTo(1),
                 ),
               ),
               const SizedBox(width: 24),
@@ -56,15 +54,25 @@ class DashboardTela extends StatelessWidget {
                   icon: Icons.group,
                   actionText: 'Gerenciar Jogadores',
                   cardColor: Colors.blue.shade600,
-                  onPressed: () => _navigateTo(context, const JogadoresTela()),
+                  onPressed: () => MainTela.of(context).navigateTo(2),
                 ),
               ),
               const SizedBox(width: 24),
               Expanded(
-                child: _NewTournamentCard(
-                  title: 'Novo Torneio Rápido',
+                child: _StyledActionCard(
+                  title: 'Novo Torneio',
                   subtitle: 'Comece a configurar um novo torneio agora mesmo.',
-                  onPressed: () => _navigateTo(context, const NovoTorneioTela()),
+                  icon: Icons.add_box_outlined,
+                  actionText: 'Criar Agora',
+                  cardColor: Colors.green.shade600,
+                  onPressed: () {
+                    // A navegação para a tela de Novo Torneio é uma nova rota
+                    // e não deve ser gerenciada pelo MainTela para não sobrepor o layout
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NovoTorneioTela()),
+                    );
+                  },
                 ),
               ),
             ],

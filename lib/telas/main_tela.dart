@@ -6,12 +6,16 @@ import 'package:chessgrid/telas/torneios_tela.dart';
 import 'package:chessgrid/telas/jogadores_tela.dart';
 import 'package:chessgrid/telas/configuracoes_tela.dart';
 import 'package:chessgrid/telas/suporte_tela.dart';
+import 'package:chessgrid/telas/novo_torneio_tela.dart';
 
 class MainTela extends StatefulWidget {
   const MainTela({super.key});
 
   @override
   State<MainTela> createState() => _MainTelaState();
+
+  // Função estática para encontrar o estado do MainTela
+  static _MainTelaState of(BuildContext context) => context.findAncestorStateOfType<_MainTelaState>()!;
 }
 
 class _MainTelaState extends State<MainTela> {
@@ -24,6 +28,43 @@ class _MainTelaState extends State<MainTela> {
     ConfiguracoesTela(),
     SuporteTela(),
   ];
+
+  void navigateTo(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // Função para retornar widgets dinâmicos com base na tela atual
+  List<Widget> _getDynamicSidebarItems() {
+    List<Widget> items = [];
+
+    if (_selectedIndex == 1) { // Na tela de Torneios
+      items.add(const Divider());
+      items.add(
+        ListTile(
+          leading: const Icon(Icons.add_box_outlined),
+          title: const Text('Criar Torneio'),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const NovoTorneioTela()));
+          },
+        ),
+      );
+    } else if (_selectedIndex == 2) { // Na tela de Jogadores
+      items.add(const Divider());
+      items.add(
+        ListTile(
+          leading: const Icon(Icons.person_add_outlined),
+          title: const Text('Adicionar Jogador'),
+          onTap: () {
+            // TODO: Chamar o formulário de adição de jogador
+          },
+        ),
+      );
+    }
+
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +80,17 @@ class _MainTelaState extends State<MainTela> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 // Logo e Título do App
-                Row(
+                const Row(
                   children: [
-                    Image.asset(
-                      'assets/logo.png', // Substitua pelo caminho do seu arquivo de imagem
-                      height: 32,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('ChessGrid', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green)),
+                    Icon(Icons.sports_esports, color: Colors.green, size: 32),
+                    SizedBox(width: 8),
+                    Text('ChessGrid', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green)),
                   ],
                 ),
                 const Text('Sistema de Torneios', style: TextStyle(fontSize: 12, color: Colors.grey)),
                 const SizedBox(height: 32),
                 
-                // Menu de Navegação
+                // Menu Principal
                 const Text('MENU PRINCIPAL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
                 const SizedBox(height: 8),
                 ListTile(
@@ -61,11 +99,7 @@ class _MainTelaState extends State<MainTela> {
                   selected: _selectedIndex == 0,
                   selectedTileColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  },
+                  onTap: () => navigateTo(0),
                 ),
                 ListTile(
                   leading: const Icon(Icons.emoji_events_outlined),
@@ -73,11 +107,7 @@ class _MainTelaState extends State<MainTela> {
                   selected: _selectedIndex == 1,
                   selectedTileColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                  },
+                  onTap: () => navigateTo(1),
                 ),
                 ListTile(
                   leading: const Icon(Icons.group_outlined),
@@ -85,26 +115,22 @@ class _MainTelaState extends State<MainTela> {
                   selected: _selectedIndex == 2,
                   selectedTileColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 2;
-                    });
-                  },
+                  onTap: () => navigateTo(2),
                 ),
-                const SizedBox(height: 24),
+
+                // Divisão e Seção "SISTEMA"
+                const Divider(height: 32),
                 const Text('SISTEMA', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
                 const SizedBox(height: 8),
+
+                // Opções da Seção "SISTEMA"
                 ListTile(
                   leading: const Icon(Icons.settings_outlined),
                   title: const Text('Configurações'),
                   selected: _selectedIndex == 3,
                   selectedTileColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 3;
-                    });
-                  },
+                  onTap: () => navigateTo(3),
                 ),
                 ListTile(
                   leading: const Icon(Icons.support_agent_outlined),
@@ -112,12 +138,12 @@ class _MainTelaState extends State<MainTela> {
                   selected: _selectedIndex == 4,
                   selectedTileColor: Colors.green.shade50,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = 4;
-                    });
-                  },
+                  onTap: () => navigateTo(4),
                 ),
+                
+                // ... Widgets Dinâmicos da Barra Lateral (se houver)
+                ..._getDynamicSidebarItems(),
+
                 const Spacer(),
                 const Divider(),
                 const ListTile(
